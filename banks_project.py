@@ -9,6 +9,8 @@ import numpy as np
 from datetime import datetime
 
 def log_progress(message):
+    ''' This function logs the mentioned message of a given stage of the
+    code execution to a log file. '''
     timestamp_format = '%Y-%h-%d-%H:%M:%S'
     now = datetime.now()
     timestamp = now.strftime(timestamp_format)
@@ -36,6 +38,10 @@ def extract(url, table_attribs):
     return df
 
 def transform(df, csv_path):
+     ''' This function accesses the CSV file for exchange rate
+    information, and adds three columns to the data frame, each
+    containing the transformed version of Market Cap column to
+    respective currencies'''
     exchange_rates = pd.read_csv(csv_path)
     exchange_rate_dict = exchange_rates.set_index('Currency')['Rate'].to_dict()
 
@@ -47,24 +53,20 @@ def transform(df, csv_path):
 
 def load_to_csv(df, output_path):
     ''' This function saves the final data frame as a CSV file in
-    the provided path. Function returns nothing.'''
+    the provided path.'''
     df.to_csv(output_path)
 
 def load_to_db(df, sql_connection, table_name):
     ''' This function saves the final data frame to a database
-    table with the provided name. Function returns nothing.'''
+    table with the provided name.'''
     df.to_sql(table_name, conn, if_exists='replace', index=False)
 
 def run_query(query_statement, sql_connection):
     ''' This function runs the query on the database table and
-    prints the output on the terminal. Function returns nothing. '''
+    prints the output on the terminal. '''
     print(query_statement)
     query_output = pd.read_sql(query_statement, sql_connection)
     print(query_output)
-
-''' Here, you define the required entities and call the relevant
-functions in the correct order to complete the project. Note that this
-portion is not inside any function.'''
 
 # Declaring known values
 url = 'https://web.archive.org/web/20230908091635 /https://en.wikipedia.org/wiki/List_of_largest_banks'
